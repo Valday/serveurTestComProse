@@ -14,6 +14,11 @@ public class Main {
                     System.out.println("serveur TCP 2");
                     serveurTCP1Connexion serveurTCP1 = new serveurTCP1Connexion();
                     serveurTCP1.launchServeur();
+
+                    if(serveurTCP1.isConnected())
+                    {
+                        System.out.println("ici");
+                    }
                     break;
                 case "-s2":
                     System.out.println("serveur TCP 2");

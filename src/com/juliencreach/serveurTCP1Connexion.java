@@ -14,6 +14,7 @@ public class serveurTCP1Connexion
     private DataOutputStream dataOutputStream;
     private Socket socketClient;
     private ServerSocket socketServeur;
+    private Boolean isAlive;
 
     public serveurTCP1Connexion()
     {
@@ -22,7 +23,7 @@ public class serveurTCP1Connexion
     public void launchServeur()
     {
         System.out.println("Hello serveur TCP 1 connexion!");
-        boolean isAlive = true;
+        this.isAlive = true;
 
         try
         {
@@ -39,27 +40,23 @@ public class serveurTCP1Connexion
             {
                 String message = "";
 
-
-                int length = this.dataInputStream.readInt();
+                int length = this.dataInputStream.available();
                 if(length > 0)
                 {
                     byte[] data = new byte[length];
-                    this.dataInputStream.readFully(data, 0, data.length);
+                    this.dataInputStream.readFully(data);
                     message = new String(data);
 
-                    this.dataOutputStream.writeInt(data.length);
                     this.dataOutputStream.write(data);
                     this.dataOutputStream.flush();
+                    System.out.println("Message : "+ message);
+
                 }
-                System.out.println("Message : "+ message);
-
-
-
 
                 //socketClient.close();
                 if(this.socketClient.isClosed())
                 {
-                    isAlive = false;
+                    this.isAlive = false;
                     System.out.println("Connection closed !");
                 }
             }
@@ -70,6 +67,11 @@ public class serveurTCP1Connexion
             System.out.println(" ==> Perte de connexion avec le client");
         }
 
+    }
+
+    public boolean isConnected()
+    {
+        return this.isAlive;
     }
 }
 
